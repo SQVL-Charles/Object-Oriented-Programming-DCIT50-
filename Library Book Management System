@@ -76,6 +76,15 @@ public class LibraryBookManagementSystem {
 
         System.out.print("Enter the title of the book: ");
         String title = scanner.nextLine();
+        
+           // Check if the book title already exists in the list
+    for (int i = 0; i < bookCount; i++) {
+        if (bookTitles[i].equalsIgnoreCase(title)) {
+            System.out.println("This book title already exists. Please enter a different title.");
+            return;
+        }
+    }
+    
         bookTitles[bookCount] = title;
         bookStatuses[bookCount] = "Available";
         bookCount++;
@@ -87,34 +96,35 @@ public class LibraryBookManagementSystem {
      * The user is prompted to enter a book number to update its status.
      */
     private static void updateBookStatus() {
-        if (bookCount == 0) {
-            System.out.println("No books in the system to update.");
-            return;
-        }
+    if (bookCount == 0) {
+        System.out.println("No books in the system to update.");
+        return;
+    }
 
-        showBooks();
-        System.out.print("Enter the book number to update (1 to " + bookCount + "): ");
-        while (!scanner.hasNextInt()) {
-            System.out.println("Invalid input. Please enter a number.");
-            scanner.next(); // Clear the invalid input
-            System.out.print("Enter the book number to update (1 to " + bookCount + "): ");
-        }
-        int bookNumber = scanner.nextInt();
-        scanner.nextLine(); // Consume the newline
+    showBooks();
+    int bookNumber = readInt("Enter the book number to update (1 to " + bookCount + "): ", 1, bookCount);
+    int index = bookNumber - 1;
 
-        if (bookNumber < 1 || bookNumber > bookCount) {
-            System.out.println("Invalid book number. Please enter a number between 1 and " + bookCount + ".");
-            return;
-        }
+    // Toggle the status
+    bookStatuses[index] = bookStatuses[index].equals("Available") ? "Borrowed" : "Available";
+    System.out.println("Book '" + bookTitles[index] + "' status updated to '" + bookStatuses[index] + "'.");
+}
 
-        int index = bookNumber - 1;
-        String currentStatus = bookStatuses[index];
-        if (currentStatus.equals("Available")) {
-            bookStatuses[index] = "Borrowed";
-            System.out.println("Book '" + bookTitles[index] + "' status has been updated to 'Borrowed'.");
-        } else {
-            bookStatuses[index] = "Available";
-            System.out.println("Book '" + bookTitles[index] + "' status has been updated to 'Available'.");
+/**
+ * Reads an integer within the given range, reprompting on invalid input.
+ */
+    private static int readInt(String prompt, int min, int max) {
+      while (true) {
+          System.out.print(prompt);
+          if (scanner.hasNextInt()) {
+              int value = scanner.nextInt();
+              scanner.nextLine(); // consume newline
+              if (value >= min && value <= max) return value;
+              System.out.println("Please enter a number between " + min + " and " + max + ".");
+            } else {
+              System.out.println("Invalid input. Please enter a number.");
+              scanner.next(); // clear invalid token
+            }
         }
     }
 
