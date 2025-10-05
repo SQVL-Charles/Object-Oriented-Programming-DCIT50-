@@ -30,7 +30,7 @@ public class MyBookList {
 
 
         // 4.) Change the current page of your favorite book to any page number you like. Display the details again.
-        book5.changePage(75);
+        book5.changePage(10000);
         System.out.println();
         book5.displayDetails();
 
